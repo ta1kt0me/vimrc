@@ -185,6 +185,7 @@ Plug 'ruby-formatter/rufo-vim', { 'for': 'ruby' }
 Plug 'posva/vim-vue', { 'for': 'vue' }
 Plug 'w0rp/ale'
 Plug 'vim-jp/vim-go-extra', { 'for': 'go' }
+Plug 'lambdalisue/vim-gista'
 
 if get(g:, 'load_wakatime')
   Plug 'wakatime/vim-wakatime'
