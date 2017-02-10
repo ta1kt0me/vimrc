@@ -1,0 +1,22 @@
+#!/bin/bash
+
+ycyc_vim_home=$HOME/.ghq/github.com/yochiyochirb/vimrc
+toku_vim_home=$HOME/.ghq/github.com/ta1kt0me/vimrc
+vimrc="/.vimrc"
+vim_after="/.vim/after"
+vim_snippets="/.vim/snippets"
+
+
+if [ $(dirname $(readlink $HOME$vimrc)) == $toku_vim_home ]; then
+  rm $HOME$vimrc $HOME$vim_after $HOME$vim_snippets
+  ln -s $ycyc_vim_home$vimrc $HOME$vimrc
+  ln -s $ycyc_vim_home$vim_after $HOME$vim_after
+  ln -s $ycyc_vim_home$vim_snippets $HOME$vim_snippets
+  echo "use yochiyochi"
+else
+  rm $HOME$vimrc $HOME$vim_after $HOME$vim_snippets
+  ln -s $toku_vim_home$vimrc $HOME$vimrc
+  ln -s $toku_vim_home$vim_after $HOME$vim_after
+  ln -s $toku_vim_home$vim_snippets $HOME$vim_snippets
+  echo "use toku"
+fi
