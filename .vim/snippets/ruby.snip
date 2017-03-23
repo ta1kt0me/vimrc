@@ -4,8 +4,9 @@ alias arrsum
 options word
   inject(:+)
 
-snippet frozen
-options head
+snippet     frozen_string_literal comment
+alias       frozen
+options     head
   # frozen_string_literal: true
   ${0}
 
