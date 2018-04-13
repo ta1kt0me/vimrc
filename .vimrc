@@ -319,6 +319,13 @@ nmap <silent> g/ <Plug>(migemo-migemosearch)
 " deoplete.nvim
 let g:deoplete#enable_at_startup = 1
 
+" ale
+highlight ALEWarning ctermbg=124
+let g:ale_fixers = {
+      \   'javascript': ['eslint'],
+      \   'ruby': ['rubocop'],
+      \}
+
 " vim-js-pretty-template
 autocmd FileType javascript JsPreTmpl html
 autocmd FileType typescript JsPreTmpl html
