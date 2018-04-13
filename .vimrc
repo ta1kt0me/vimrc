@@ -236,6 +236,8 @@ nnoremap <silent> [unite]u :<C-u>Denite<Space>-resume<Return>
 
 call denite#custom#map('insert', '<C-j>', '<denite:move_to_next_line>', 'noremap')
 call denite#custom#map('insert', '<C-k>', '<denite:move_to_previous_line>', 'noremap')
+call denite#custom#map('insert', '<C-d>', '<denite:scroll_page_forwards>', 'noremap')
+call denite#custom#map('insert', '<C-u>', '<denite:scroll_page_backwards>', 'noremap')
 call denite#custom#map('insert', '<C-x>', '<denite:input_command_line>', 'noremap')
 
 " Use 'ag' instead of 'grep' if available
