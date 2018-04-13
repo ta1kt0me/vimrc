@@ -240,9 +240,9 @@ call denite#custom#map('insert', '<C-d>', '<denite:scroll_page_forwards>', 'nore
 call denite#custom#map('insert', '<C-u>', '<denite:scroll_page_backwards>', 'noremap')
 call denite#custom#map('insert', '<C-x>', '<denite:input_command_line>', 'noremap')
 
-" Use 'ag' instead of 'grep' if available
-if executable('ag')
-  call denite#custom#var('grep', 'command', ['ag'])
+" Use 'rg' instead of 'grep' if available
+if executable('rg')
+  call denite#custom#var('grep', 'command', ['rg'])
   call denite#custom#var('grep', 'default_opts',
                   \ ['-i', '--vimgrep'])
   call denite#custom#var('grep', 'recursive_opts', [])
