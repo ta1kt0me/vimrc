@@ -186,6 +186,7 @@ Plug 'w0rp/ale'
 Plug 'vim-jp/vim-go-extra', { 'for': 'go' }
 Plug 'lambdalisue/vim-gista'
 Plug 'simeji/winresizer'
+Plug 'ta1kt0me/auto-git-diff'
 
 if get(g:, 'load_wakatime')
   Plug 'wakatime/vim-wakatime'
