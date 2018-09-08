@@ -207,6 +207,7 @@ Plug 'sjl/badwolf'
 Plug 'altercation/vim-colors-solarized'
 Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'NLKNguyen/papercolor-theme'
+Plug 'rhysd/vim-color-spring-night'
 
 " nvim-yarp and vim-hug-neovim-rpc are required for deoplete.nvim in Vim8.
 if !has('nvim')
