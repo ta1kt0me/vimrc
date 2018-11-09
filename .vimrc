@@ -183,7 +183,6 @@ Plug 'mtsmfm/unite-turnip'
 Plug 'ruby-formatter/rufo-vim', { 'for': 'ruby' }
 Plug 'posva/vim-vue', { 'for': 'vue' }
 Plug 'w0rp/ale'
-Plug 'vim-jp/vim-go-extra', { 'for': 'go' }
 Plug 'lambdalisue/vim-gista'
 Plug 'simeji/winresizer'
 Plug 'ta1kt0me/auto-git-diff'
@@ -365,9 +364,6 @@ let g:vimwiki_list = [{
 \}]
 let g:vimwiki_global_ext = 0
 let g:vimwiki_use_calendar = 1
-
-" vim-go-extra
-autocmd FileType go autocmd BufWritePre <buffer> Fmt
 
 " winresizer
 let g:winresizer_start_key = "<Leader>w"
