@@ -271,6 +271,7 @@ nnoremap <silent> [rails]t :<C-u>Denite<Space>rails:test<Return>
 
 " unite-outline (to call it via denite)
 nnoremap <silent> [unite]o :<C-u>Denite unite:outline<Return>
+
 " Neosnippet
 imap <C-k> <Plug>(neosnippet_expand_or_jump)
 smap <C-k> <Plug>(neosnippet_expand_or_jump)
@@ -335,8 +336,10 @@ let g:ale_fixers = {
       \}
 
 " vim-js-pretty-template
-autocmd FileType javascript JsPreTmpl html
-autocmd FileType typescript JsPreTmpl html
+autocmd FileType javascript JsPreTmpl
+autocmd FileType javascript.jsx JsPreTmpl
+autocmd FileType typescript JsPreTmpl
+
 " For leafgarland/typescript-vim users only.
 " Please see https://github.com/Quramy/vim-js-pretty-template/issues/1 for details.
 autocmd FileType typescript syn clear foldBraces
