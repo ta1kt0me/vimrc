@@ -187,6 +187,7 @@ Plug 'lambdalisue/vim-gista'
 Plug 'simeji/winresizer'
 Plug 'ta1kt0me/auto-git-diff'
 Plug 'mattn/sonictemplate-vim'
+Plug 'hashivim/vim-terraform'
 
 if get(g:, 'load_wakatime')
   Plug 'wakatime/vim-wakatime'
@@ -364,6 +365,9 @@ autocmd FileType go nmap <Leader>gb <Plug>(go-doc-browser)
 autocmd FileType go nmap <Leader>s <Plug>(go-implements)
 autocmd FileType go nmap <Leader>i <Plug>(go-info)
 autocmd FileType go nmap <Leader>e <Plug>(go-rename)
+
+" terraform-vim
+autocmd FileType terraform nmap <Leader>fmt :<C-u>TerraformFmt<Return>
 
 " vimwiki
 let g:vimwiki_list = [{
