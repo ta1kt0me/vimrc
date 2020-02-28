@@ -190,6 +190,7 @@ Plug 'ta1kt0me/auto-git-diff'
 Plug 'mattn/sonictemplate-vim'
 Plug 'hashivim/vim-terraform'
 Plug 'chr4/nginx.vim'
+Plug 'lepture/vim-jinja'
 
 if get(g:, 'load_wakatime')
   Plug 'wakatime/vim-wakatime'
