@@ -149,6 +149,7 @@ Plug 'Shougo/neomru.vim'
 Plug 'Shougo/unite.vim'
 Plug 'Shougo/neosnippet'
 Plug 'Shougo/neosnippet-snippets'
+Plug 'prabirshrestha/asyncomplete-neosnippet.vim'
 Plug 'Shougo/unite-outline'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'itchyny/lightline.vim'
@@ -277,6 +278,13 @@ nnoremap <silent> [rails]t :<C-u>Denite<Space>rails:test<Return>
 " unite-outline (to call it via denite)
 nnoremap <silent> [unite]o :<C-u>Denite unite:outline<Return>
 
+" asynccomplete-neosnippet
+call asyncomplete#register_source(asyncomplete#sources#neosnippet#get_source_options({
+    \ 'name': 'neosnippet',
+    \ 'whitelist': ['*'],
+    \ 'completor': function('asyncomplete#sources#neosnippet#completor'),
+    \ }))
+
 " Neosnippet
 imap <C-k> <Plug>(neosnippet_expand_or_jump)
 smap <C-k> <Plug>(neosnippet_expand_or_jump)
@@ -334,18 +342,6 @@ if empty(globpath(&rtp, 'autoload/lsp.vim'))
   finish
 endif
 
-function! s:on_lsp_buffer_enabled() abort
-  setlocal omnifunc=lsp#complete
-  setlocal signcolumn=yes
-  nmap <buffer> gd <plug>(lsp-definition)
-  nmap <buffer> <f2> <plug>(lsp-rename)
-  inoremap <expr> <cr> pumvisible() ? "\<c-y>\<cr>" : "\<cr>"
-endfunction
-
-augroup lsp_install
-  au!
-  autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
-augroup END
 command! LspDebug let lsp_log_verbose=1 | let lsp_log_file = expand('~/lsp.log')
 
 let g:lsp_diagnostics_enabled = 0
