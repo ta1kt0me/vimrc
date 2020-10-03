@@ -136,7 +136,14 @@ call plug#begin('~/.vim/plugged')
 
 Plug 'Shougo/vimproc.vim', { 'do': 'make' }
 Plug 'Shougo/denite.nvim', { 'do': function('DoUpdateRemotePlugins') }
-Plug 'Shougo/deoplete.nvim', { 'do': function('DoUpdateRemotePlugins') }
+Plug 'prabirshrestha/async.vim'
+Plug 'prabirshrestha/asyncomplete.vim'
+Plug 'prabirshrestha/asyncomplete-lsp.vim'
+Plug 'prabirshrestha/vim-lsp'
+Plug 'mattn/vim-lsp-settings'
+Plug 'mattn/vim-lsp-icons'
+Plug 'hrsh7th/vim-vsnip'
+Plug 'hrsh7th/vim-vsnip-integ'
 Plug '5t111111/denite-rails'
 Plug 'Shougo/neomru.vim'
 Plug 'Shougo/unite.vim'
@@ -211,12 +218,6 @@ Plug 'altercation/vim-colors-solarized'
 Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'NLKNguyen/papercolor-theme'
 Plug 'rhysd/vim-color-spring-night'
-
-" nvim-yarp and vim-hug-neovim-rpc are required for deoplete.nvim in Vim8.
-if !has('nvim')
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-endif
 
 call plug#end()
 
@@ -329,8 +330,30 @@ xnoremap <silent> <Leader>s :<C-u>'<,'>OverCommandLine<Return>
 " vim-migemo
 nmap <silent> g/ <Plug>(migemo-migemosearch)
 
-" deoplete.nvim
-let g:deoplete#enable_at_startup = 1
+if empty(globpath(&rtp, 'autoload/lsp.vim'))
+  finish
+endif
+
+function! s:on_lsp_buffer_enabled() abort
+  setlocal omnifunc=lsp#complete
+  setlocal signcolumn=yes
+  nmap <buffer> gd <plug>(lsp-definition)
+  nmap <buffer> <f2> <plug>(lsp-rename)
+  inoremap <expr> <cr> pumvisible() ? "\<c-y>\<cr>" : "\<cr>"
+endfunction
+
+augroup lsp_install
+  au!
+  autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+augroup END
+command! LspDebug let lsp_log_verbose=1 | let lsp_log_file = expand('~/lsp.log')
+
+let g:lsp_diagnostics_enabled = 0
+let g:lsp_diagnostics_echo_cursor = 0
+let g:asyncomplete_auto_popup = 0
+let g:asyncomplete_auto_completeopt = 0
+let g:asyncomplete_popup_delay = 800
+let g:lsp_text_edit_enabled = 0
 
 " ale
 highlight ALEWarning ctermbg=124
