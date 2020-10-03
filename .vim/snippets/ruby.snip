@@ -72,3 +72,18 @@ snippet expect
 abbr exp
 options word
   expect(${1:actual}).to ${2:matcher}(${3:expected})
+
+snippet bye
+abbr bye
+options indent
+  byebug if ${1:condition}
+
+snippet method?
+abbr meth
+options word
+  p ${1:object}.methods.grep(%r{${2:regexp}})
+
+snippet source?
+abbr source
+options word
+  p ${1:object}.method(:${2:method}).source_location
