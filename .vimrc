@@ -135,7 +135,11 @@ endfunction
 call plug#begin('~/.vim/plugged')
 
 Plug 'Shougo/vimproc.vim', { 'do': 'make' }
-Plug 'Shougo/denite.nvim', { 'do': function('DoUpdateRemotePlugins') }
+" for vim
+Plug 'Shougo/denite.nvim'
+Plug 'roxma/nvim-yarp'
+Plug 'roxma/vim-hug-neovim-rpc'
+
 Plug 'prabirshrestha/async.vim'
 Plug 'prabirshrestha/asyncomplete.vim'
 Plug 'prabirshrestha/asyncomplete-lsp.vim'
