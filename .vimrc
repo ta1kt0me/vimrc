@@ -156,6 +156,7 @@ Plug 'Shougo/neosnippet-snippets'
 Plug 'prabirshrestha/asyncomplete-neosnippet.vim'
 Plug 'Shougo/unite-outline'
 Plug 'ctrlpvim/ctrlp.vim'
+Plug 'mattn/ctrlp-matchfuzzy'
 Plug 'itchyny/lightline.vim'
 Plug 'easymotion/vim-easymotion'
 Plug 'junegunn/vim-easy-align'
@@ -304,6 +305,8 @@ if get(g:, 'load_cpsm')
   let g:ctrlp_match_func = { 'match': 'cpsm#CtrlPMatch' }
   call denite#custom#source('file_rec', 'matchers', ['matcher_cpsm'])
 endif
+
+let g:ctrlp_match_func = { 'match': 'ctrlp_matchfuzzy#matcher' }
 
 let g:ctrlp_user_command = {
   \ 'types': {
