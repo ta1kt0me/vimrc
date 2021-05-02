@@ -1,16 +1,25 @@
-" Load Your .vimrc preset
+" Setup PATH
 " ------------------------------------------------
-" {{{1
+" {{{
 
-if filereadable(expand('~/.vimrc.preset'))
-  source ~/.vimrc.preset
-endif
+function! IncludePath(path)
+  let delimiter = ":"
+  let pathlist = split($PATH, delimiter)
+
+  if isdirectory(a:path) && index(pathlist, a:path) == -1
+    let $PATH = a:path.delimiter.$PATH
+  endif
+endfunction
+
+call IncludePath(expand("~/.pyenv/shims"))
+call IncludePath(expand("~/.rbenv/shims"))
+call IncludePath(expand("~/.goenv/shims"))
 
 " }}}
 
 " General Settings
 " ------------------------------------------------
-" {{{1
+" {{{
 
 " Define and re-initialize augroup for vimrc
 augroup vimrc
@@ -20,7 +29,7 @@ augroup END
 syntax on
 filetype plugin indent on
 
-" Buffer Settings
+" buffer setting
 set hidden
 
 " Tab/Indent Settings
@@ -40,16 +49,11 @@ set backspace=indent,eol,start
 set title
 set laststatus=2
 
-" Wildmode settings for Zsh like completion
+" Wildmode settings
 set wildmenu
 set wildmode=longest,full
 
-" Register Settings
-if has('nvim')
-  set clipboard+=unnamedplus
-else
-  set clipboard^=unnamed,unnamedplus
-endif
+set clipboard^=unnamed,unnamedplus
 
 " Leader
 let mapleader = "\<Space>"
@@ -69,6 +73,11 @@ runtime macros/matchit.vim
 
 " Enable persistent undo only when the feature is implemented
 if has('persistent_undo')
+  " Undo file location
+  if !isdirectory(expand('~/.vim/undo'))
+    call mkdir(expand('~/.vim/undo'), 'p')
+  endif
+
   set undodir=~/.vim/undo
   set undofile
 endif
@@ -77,7 +86,7 @@ endif
 
 " General Key Bindings
 " ------------------------------------------------
-" {{{1
+" {{{
 
 " Edit/Reload .vimrc
 nnoremap <Leader>fed :<C-u>edit $MYVIMRC<Return>
@@ -98,7 +107,8 @@ nnoremap <Up> :echoe<Space>"Use k"<Return>
 nnoremap <Down> :echoe<Space>"Use j"<Return>
 
 " Deleting a buffer without closing the window
-nnoremap <silent> <leader>bd :bprevious\|:bdelete<Space>#<Return>
+nnoremap <silent> <leader>bd :<C-u>bprevious\|:bdelete<Space>#<Return>
+nnoremap <silent> <leader>bw :<C-u>bprevious\|:bwipe<Space>#<Return>
 
 " <ESC> when typing 'jj' quick
 inoremap jj <Esc>
@@ -120,11 +130,10 @@ endif
 
 " Plugins
 " ------------------------------------------------
-" {{{1
+" {{{
 
 " Requires plug.vim installed in the autoload directory.
 " See https://github.com/junegunn/vim-plug for details.
-
 
 function! DoUpdateRemotePlugins(arg)
   if has('nvim')
@@ -134,178 +143,121 @@ endfunction
 
 call plug#begin('~/.vim/plugged')
 
-Plug 'Shougo/vimproc.vim', { 'do': 'make' }
-" for vim
-Plug 'Shougo/denite.nvim'
-Plug 'roxma/nvim-yarp'
-Plug 'roxma/vim-hug-neovim-rpc'
+" window
+Plug 'simeji/winresizer'
+Plug 'itchyny/lightline.vim'
+Plug 'rhysd/vim-color-spring-night'
 
-Plug 'prabirshrestha/async.vim'
-Plug 'prabirshrestha/asyncomplete.vim'
-Plug 'prabirshrestha/asyncomplete-lsp.vim'
-Plug 'prabirshrestha/vim-lsp'
-Plug 'mattn/vim-lsp-settings'
-Plug 'mattn/vim-lsp-icons'
-Plug 'hrsh7th/vim-vsnip'
-Plug 'hrsh7th/vim-vsnip-integ'
-Plug '5t111111/denite-rails'
-Plug 'Shougo/neomru.vim'
-Plug 'Shougo/unite.vim'
-Plug 'Shougo/neosnippet'
-Plug 'Shougo/neosnippet-snippets'
-Plug 'prabirshrestha/asyncomplete-neosnippet.vim'
-Plug 'Shougo/unite-outline'
+" fuzzy-finder
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'mattn/ctrlp-matchfuzzy'
-Plug 'itchyny/lightline.vim'
-Plug 'easymotion/vim-easymotion'
-Plug 'junegunn/vim-easy-align'
-Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' } | Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': 'NERDTreeToggle' }
-Plug 'ta1kt0me/vim-minigutter'
-Plug 'godlygeek/tabular', { 'for': 'markdown' } | Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
-Plug 'previm/previm', { 'for': 'markdown' }
-Plug 'tyru/open-browser.vim'
-Plug 'tyru/open-browser-github.vim'
-Plug 'tyru/caw.vim'
-Plug 'osyo-manga/vim-anzu'
-Plug 'osyo-manga/vim-over'
-Plug 'ntpeters/vim-better-whitespace'
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-endwise', { 'for': 'ruby' }
-Plug 'tpope/vim-cucumber', { 'for': 'cucumber' }
-Plug 'tpope/vim-rails'
-Plug 'gregsexton/gitv', { 'on': 'Gitv' }
-Plug 'jgdavey/vim-blockle', { 'for': 'ruby' }
-Plug 'slim-template/vim-slim', { 'for': 'slim' }
-Plug 'kchmck/vim-coffee-script', { 'for': 'coffee' }
-Plug 'neovimhaskell/haskell-vim', { 'for': ['haskell', 'cabal'] }
-Plug 'elixir-lang/vim-elixir', { 'for': 'elixir' }
-Plug 'rhysd/vim-crystal', { 'for': 'crystal' }
-Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx'] } | Plug 'mxw/vim-jsx', { 'for': 'javascript.jsx' }
-Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
-Plug 'Quramy/tsuquyomi', { 'for': 'typescript' }
-Plug 'Quramy/vim-js-pretty-template', { 'for': ['javascript', 'typescript'] }
-Plug 'alvan/vim-closetag', { 'for': ['html', 'javascript', 'javascript.jsx', 'typescript'] }
-Plug 'fatih/vim-go', { 'for': 'go' }
-Plug 'rust-lang/rust.vim', { 'for': 'rust' }
-Plug 'dag/vim-fish', { 'for': 'fish' }
-Plug 'sunaku/vim-ruby-minitest'
-Plug 'haya14busa/vim-migemo'
-Plug 'mattn/calendar-vim'
-Plug 'mtsmfm/unite-turnip'
-Plug 'ruby-formatter/rufo-vim', { 'for': 'ruby' }
-Plug 'posva/vim-vue', { 'for': 'vue' }
-Plug 'w0rp/ale'
-Plug 'lambdalisue/vim-gista'
-Plug 'simeji/winresizer'
-Plug 'ta1kt0me/auto-git-diff'
+
+" vim-molder
+Plug 'mattn/vim-molder'
+Plug 'mattn/vim-molder-operations'
+
+" snippet
 Plug 'mattn/sonictemplate-vim'
+Plug 'Shougo/neosnippet'
+Plug 'Shougo/neosnippet-snippets'
+
+" search
+Plug 'osyo-manga/vim-anzu'
+
+" DX
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'w0rp/ale'
+Plug 'junegunn/vim-easy-align'
+Plug 'tyru/caw.vim'
+Plug 'ntpeters/vim-better-whitespace'
+" cs, ds, yss
+Plug 'tpope/vim-surround'
+
+" Language
+Plug 'dag/vim-fish', { 'for': 'fish' }
+Plug 'tpope/vim-endwise', { 'for': 'ruby' }
+Plug 'jgdavey/vim-blockle', { 'for': 'ruby' }
+Plug 'sunaku/vim-ruby-minitest', { 'for': 'ruby' }
+Plug 'slim-template/vim-slim', { 'for': 'slim' }
 Plug 'hashivim/vim-terraform'
 Plug 'chr4/nginx.vim'
+Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx'] }
+Plug 'mxw/vim-jsx', { 'for': 'javascript.jsx' }
 Plug 'lepture/vim-jinja'
-
-if get(g:, 'load_wakatime')
-  Plug 'wakatime/vim-wakatime'
-endif
-
-if get(g:, 'load_cpsm')
-  Plug 'nixprime/cpsm', { 'do': 'env PY3=ON ./install.sh' }
-endif
-
-if get(g:, 'load_vimwiki')
-  Plug 'vimwiki/vimwiki'
-endif
-
-" Colorschemes
-Plug 'tomasr/molokai'
-Plug 'sjl/badwolf'
-Plug 'altercation/vim-colors-solarized'
-Plug 'dracula/vim', { 'as': 'dracula' }
-Plug 'NLKNguyen/papercolor-theme'
-Plug 'rhysd/vim-color-spring-night'
+Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
+Plug 'itkq/fluentd-vim'
 
 call plug#end()
 
 " }}}
 
-" Plugin Specific Settings
+" Vim Plugin Molder Extension
 " ------------------------------------------------
-" {{{1
+" {{{
 
-" Unite.vim
-nnoremap [unite] <Nop>
-nmap     <Leader>u [unite]
+function! CreateNewfileInMolder() abort
+  let l:name = input('Create file: ')
+  if empty(l:name)
+    return
+  endif
 
-let g:unite_enable_start_insert = 1
+  if l:name == '.' || l:name == '..' || l:name =~# '[/\\]'
+    call molder#error('Invalid file name: ' .. l:name)
+    return
+  endif
 
-" Denite.vim
-nnoremap <silent> [unite]r :<C-u>Denite<Space>file_mru<Return>
-nnoremap <silent> [unite]b :<C-u>Denite<Space>buffer<Return>
-nnoremap <silent> [unite]fp :<C-u>Denite<Space>file_rec<Return>
-nnoremap <silent> [unite]gp :<C-u>Denite<Space>grep<Return>
-nnoremap <silent> [unite]l :<C-u>Denite<Space>line<Return>
-nnoremap <silent> [unite]u :<C-u>Denite<Space>-resume<Return>
+  let l:fullpath = molder#curdir() .. l:name
 
-" Define mappings
-autocmd FileType denite call s:denite_my_settings()
-function! s:denite_my_settings() abort
-  nnoremap <silent><buffer><expr> <CR> denite#do_map('do_action')
-  nnoremap <silent><buffer><expr> d denite#do_map('do_action', 'delete')
-  nnoremap <silent><buffer><expr> p denite#do_map('do_action', 'preview')
-  nnoremap <silent><buffer><expr> q denite#do_map('quit')
-  nnoremap <silent><buffer><expr> i denite#do_map('open_filter_buffer')
-  nnoremap <silent><buffer><expr> <Space> denite#do_map('toggle_select')
+  if getftype(l:fullpath) != ''
+    call molder#error(l:name .. ' exists')
+    return
+  endif
+
+  call writefile([], l:fullpath)
+  call molder#reload()
 endfunction
 
-" Use 'rg' instead of 'grep' if available
-if executable('rg')
-  call denite#custom#var('grep', 'command', ['rg'])
-  call denite#custom#var('grep', 'default_opts',
-                  \ ['-i', '--vimgrep'])
-  call denite#custom#var('grep', 'recursive_opts', [])
-  call denite#custom#var('grep', 'pattern_opt', [])
-  call denite#custom#var('grep', 'separator', ['--'])
-  call denite#custom#var('grep', 'final_opts', [])
-endif
+" 開いている場合は何もしない
+" 開いているけど表示していない場合は close and reopen
+function! OpenMolder()
+  for buffer in getbufinfo()
+    if has_key(buffer['variables'], 'current_syntax')
+      if buffer['variables']['current_syntax'] == 'molder'
+        if buffer['loaded'] == 0
+          " not loaded な場合、利用されていないから閉じる
+          exe 'bwipe' buffer.bufnr
+          :continue
+        endif
 
-" denite-rails
-nnoremap [rails] <Nop>
-nmap     <Leader>r [rails]
-nnoremap [rails]r :Denite<Space>rails:
-nnoremap <silent> [rails]r :<C-u>Denite<Space>rails:dwim<Return>
-nnoremap <silent> [rails]m :<C-u>Denite<Space>rails:model<Return>
-nnoremap <silent> [rails]c :<C-u>Denite<Space>rails:controller<Return>
-nnoremap <silent> [rails]v :<C-u>Denite<Space>rails:view<Return>
-nnoremap <silent> [rails]h :<C-u>Denite<Space>rails:helper<Return>
-nnoremap <silent> [rails]t :<C-u>Denite<Space>rails:test<Return>
+        exe 'buffer' buffer.bufnr
+        return 0
+      end
+    endif
+  endfor
 
-" unite-outline (to call it via denite)
-nnoremap <silent> [unite]o :<C-u>Denite unite:outline<Return>
+  " open current directory
+  " nnoremap <silent> <Leader>nt :<C-u>set nosplitright\|vnew\|vertical resize 30\|edit .<CR>
+  set nosplitright
+  vnew
+  edit .
+  return 0
+endfunction
 
-" asynccomplete-neosnippet
-call asyncomplete#register_source(asyncomplete#sources#neosnippet#get_source_options({
-    \ 'name': 'neosnippet',
-    \ 'whitelist': ['*'],
-    \ 'completor': function('asyncomplete#sources#neosnippet#completor'),
-    \ }))
+nnoremap <silent> <Leader>nt :<C-u>call OpenMolder()<CR>
 
-" Neosnippet
-imap <C-k> <Plug>(neosnippet_expand_or_jump)
-smap <C-k> <Plug>(neosnippet_expand_or_jump)
-xmap <C-k> <Plug>(neosnippet_expand_target)
-let g:neosnippet#enable_snipmate_compatibility = 1
-let g:neosnippet#snippets_directory='~/.vim/snippets'
+augroup VimMolder
+  autocmd!
+  autocmd FileType molder nnoremap <silent><buffer>q :<C-u>bwipe!<CR>
+  autocmd FileType molder nnoremap <buffer>f :<C-u>call CreateNewfileInMolder()<CR>
+augroup END
 
-" NERDTree
-nnoremap <silent> <Leader>nt :<C-u>NERDTreeToggle<Return>
+" }}}
+
+" Plugin Settings
+" ------------------------------------------------
+" {{{
 
 " CtrlP
-if get(g:, 'load_cpsm')
-  let g:ctrlp_match_func = { 'match': 'cpsm#CtrlPMatch' }
-  call denite#custom#source('file_rec', 'matchers', ['matcher_cpsm'])
-endif
-
 let g:ctrlp_match_func = { 'match': 'ctrlp_matchfuzzy#matcher' }
 
 let g:ctrlp_user_command = {
@@ -317,8 +269,22 @@ let g:ctrlp_user_command = {
 let g:ctrlp_match_window = 'bottom,order:btt,min:3,max:15,results:15'
 let g:ctrlp_open_new_file = 'r'
 
-" vim-easymotion
-let g:EasyMotion_smartcase = 1
+" winresizer
+let g:winresizer_start_key = "<Leader>w"
+
+" ale
+highlight ALEWarning ctermbg=124
+let g:ale_fixers = {
+      \   'javascript': ['eslint', 'prettier'],
+      \   'ruby': ['rubocop'],
+      \}
+
+" vim-anzu
+nmap n <Plug>(anzu-n)
+nmap N <Plug>(anzu-N)
+nmap * <Plug>(anzu-star)
+nmap # <Plug>(anzu-sharp)
+nmap <silent> <Esc><Esc> :<C-u>nohlsearch<Return><Plug>(anzu-clear-search-status)
 
 " vim-easy-align
 xmap ga <Plug>(EasyAlign)
@@ -328,89 +294,85 @@ nmap ga <Plug>(EasyAlign)
 let g:vim_markdown_folding_disabled = 1
 let g:vim_markdown_frontmatter = 1
 
-" previm
-nnoremap <silent> <Leader>mp :<C-u>PrevimOpen<Return>
-
-" vim-anzu
-nmap n <Plug>(anzu-n)
-nmap N <Plug>(anzu-N)
-nmap * <Plug>(anzu-star)
-nmap # <Plug>(anzu-sharp)
-nmap <silent> <Esc><Esc> :<C-u>nohlsearch<Return><Plug>(anzu-clear-search-status)
-
-" vim-over
-nnoremap <silent> <Leader>s :<C-u>OverCommandLine<Return>
-xnoremap <silent> <Leader>s :<C-u>'<,'>OverCommandLine<Return>
-
-" vim-migemo
-nmap <silent> g/ <Plug>(migemo-migemosearch)
-
-if empty(globpath(&rtp, 'autoload/lsp.vim'))
-  finish
-endif
-
-command! LspDebug let lsp_log_verbose=1 | let lsp_log_file = expand('~/lsp.log')
-
-let g:asyncomplete_auto_completeopt = 1
-let g:asyncomplete_popup_delay = 800
-let g:lsp_text_edit_enabled = 0
-
-" ale
-highlight ALEWarning ctermbg=124
-let g:ale_fixers = {
-      \   'javascript': ['eslint'],
-      \   'ruby': ['rubocop'],
-      \}
-
-" vim-js-pretty-template
-autocmd FileType javascript JsPreTmpl
-autocmd FileType javascript.jsx JsPreTmpl
-autocmd FileType typescript JsPreTmpl
-
-" For leafgarland/typescript-vim users only.
-" Please see https://github.com/Quramy/vim-js-pretty-template/issues/1 for details.
-autocmd FileType typescript syn clear foldBraces
-
-" tsuquyomi
-let g:tsuquyomi_completion_detail = 1
-let g:tsuquyomi_disable_quickfix = 1
-autocmd FileType typescript map <buffer> <C-\> <Plug>(TsuquyomiGoBack)
-
-" vim-go
-" See https://github.com/fatih/vim-go#example-mappings for mapping details
-autocmd FileType go nmap <Leader>r <Plug>(go-run)
-autocmd FileType go nmap <Leader>b <Plug>(go-build)
-autocmd FileType go nmap <Leader>t <Plug>(go-test)
-autocmd FileType go nmap <Leader>c <Plug>(go-coverage)
-autocmd FileType go nmap <Leader>ds <Plug>(go-def-split)
-autocmd FileType go nmap <Leader>dv <Plug>(go-def-vertical)
-autocmd FileType go nmap <Leader>dt <Plug>(go-def-tab)
-autocmd FileType go nmap <Leader>gd <Plug>(go-doc)
-autocmd FileType go nmap <Leader>gv <Plug>(go-doc-vertical)
-autocmd FileType go nmap <Leader>gb <Plug>(go-doc-browser)
-autocmd FileType go nmap <Leader>s <Plug>(go-implements)
-autocmd FileType go nmap <Leader>i <Plug>(go-info)
-autocmd FileType go nmap <Leader>e <Plug>(go-rename)
-
 " terraform-vim
 autocmd FileType terraform nmap <Leader>fmt :<C-u>TerraformFmt<Return>
 
-" vimwiki
-let g:vimwiki_list = [{
-  \ 'path': '~/vimwiki/',
-  \ 'syntax': 'markdown', 'ext': '.md'
-\}]
-let g:vimwiki_global_ext = 0
-let g:vimwiki_use_calendar = 1
+" sonictemplate-vim
+let g:sonictemplate_vim_template_dir = [
+\ '$HOME/.config/nvim/template'
+\]
 
-" winresizer
-let g:winresizer_start_key = "<Leader>w"
+" vim-coc
+highlight CocErrorSign ctermfg=15 ctermbg=196
+highlight CocWarningSign ctermfg=0 ctermbg=172
+
+" coc-git
+" TODO: gitgutterのハイライトを調整したい
+
+" Neosnippet
+imap <C-k> <Plug>(neosnippet_expand_or_jump)
+smap <C-k> <Plug>(neosnippet_expand_or_jump)
+xmap <C-k> <Plug>(neosnippet_expand_target)
+let g:neosnippet#enable_snipmate_compatibility = 1
+let g:neosnippet#snippets_directory='~/.vim/snippets'
+
+let g:airline_powerline_fonts = 1
+let g:lightline = {
+    \ 'colorscheme': 'PaperColor_light',
+    \ 'active': {
+    \   'left': [ [ 'mode', 'paste' ],
+    \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+    \ },
+    \ 'component_function': {
+    \   'gitbranch': 'LightlineGitStatus'
+    \ },
+\ }
+
+function! LightlineGitStatus() abort
+  let l:git_status = get(g:, 'coc_git_status', '')
+  return l:git_status
+endfunction
+
+" coclist
+nnoremap <Leader>cb :<C-u>CocList buffers<Return>
+
+" grep word under cursor
+command! -nargs=+ -complete=custom,s:GrepArgs Rg exe 'CocList grep '.<q-args>
+
+function! s:GrepArgs(...)
+  let list = ['-S', '-smartcase', '-i', '-ignorecase', '-w', '-word',
+        \ '-e', '-regex', '-u', '-skip-vcs-ignores', '-t', '-extension']
+  return join(list, "\n")
+endfunction
+
+" Keymapping for grep word under cursor with interactive mode
+nnoremap <Leader>cf :<C-u>exe 'CocList -I --input='.expand('<cword>').' grep'<CR>
+vnoremap <leader>cf :<C-u>call <SID>GrepFromSelected(visualmode())<CR>
+
+function! s:GrepFromSelected(type)
+  let saved_unnamed_register = @@
+  if a:type ==# 'v'
+    normal! `<v`>y
+  elseif a:type ==# 'char'
+    normal! `[v`]y
+  else
+    return
+  endif
+  let word = substitute(@@, '\n$', '', 'g')
+  let word = escape(word, '| ')
+  let @@ = saved_unnamed_register
+  execute 'CocList grep '.word
+endfunction
+
+nnoremap <Leader>cgs :<C-u>CocList --normal gstatus<Return>
+nnoremap <Leader>cgb :<C-u>CocList --normal bcommits<Return>
+nnoremap <Leader>cgc :<C-u>CocCommand git.showCommit<Return>
 
 " }}}
 
 " Extra Commands
 " ------------------------------------------------
-" {{{1
+" {{{
 
 " Prettify JSON
 if executable('jq')
@@ -425,16 +387,33 @@ else
     \ separators=(\",\", \": \"), ensure_ascii=False).encode(\"utf8\")"'
 endif
 
+" =========
+" ruby
+" =========
+command! ExecuteRuby call s:execute_ruby()
+function! s:execute_ruby() abort
+  if filereadable(expand("%"))
+    call term_start(printf('ruby %s', expand("%")))
+  else
+    ruby << EOS
+    eval(Vim::Buffer.current.length.times.inject("") { |res, i| res << Vim::Buffer::current[i+1] << "\n" })
+EOS
+  endif
+endfunction
+" nnoremap <silent> <leader>rb :ruby<Space>eval(Vim::Buffer.current.length.times.inject(''){<Bar>res,i<Bar>res<lt><lt><Space>Vim::Buffer.current[i+1]<lt><lt><Space>"<Bslash>n"})<Return>
+nnoremap <silent> <Leader>rb :<C-u>ExecuteRuby<Return>
+
 " }}}
 
-" Load Your Local .vimrc
-" ------------------------------------------------
-" {{{1
+" TODO
+" auto-git-diff っぽいいのある？
+"   - rhysd/committia.vim
+"   - coc-git の `CocCommand git.showCommit` でも良いかも
+" cocの選択肢の最初を選択肢ない状態にしたい
 
-if filereadable(expand('~/.vimrc.local'))
-  source ~/.vimrc.local
-endif
+let color = 'spring-night'
+colorscheme spring-night
 
-" }}}
+set shell=fish
 
 " vim:set foldmethod=marker:
