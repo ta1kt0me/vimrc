@@ -1,7 +1,7 @@
-if exists('b:did_ftplugin_zsh')
+if exists('b:did_ftplugin_shell')
   finish
 endif
-let b:did_ftplugin_zsh = 1
+let b:did_ftplugin_shell = 1
 
 setlocal expandtab
 setlocal tabstop=2
