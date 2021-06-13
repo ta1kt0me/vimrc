@@ -306,6 +306,8 @@ let g:sonictemplate_vim_template_dir = [
 highlight CocErrorSign ctermfg=15 ctermbg=196
 highlight CocWarningSign ctermfg=0 ctermbg=172
 
+let g:coc_global_extensions = ['coc-lists', 'coc-git', 'coc-diagnostic', 'coc-dictionary', 'coc-neosnippet', 'coc-word']
+
 " coc-git
 " TODO: gitgutterのハイライトを調整したい
 
